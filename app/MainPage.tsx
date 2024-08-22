@@ -2,16 +2,20 @@ import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import fonts from "../styles/fonts";
 import EvilIcons from '@expo/vector-icons/EvilIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import renderItem from "../components/renderTag";
 import colors from "../styles/colors";
 import { useEffect, useState } from "react";
-import { useAppContext } from "../components/MemoProvider";
+import { useMyContext } from "../components/MemoProvider";
+import { Link, router } from "expo-router";
+import RenderItem from "../components/renderItem";
+import RenderMemo from "../components/renderMemo";
 
 
 export default function MainPage() {
 
-    const { exampleData } = useAppContext();
+    const { exampleData, pressTag, tagPressed } = useMyContext();
     const [groupedData, setGroupedData] = useState([]);
+    
+    const filteredData = exampleData.filter(item => item.tag === tagPressed);
 
     useEffect(() => {
         const grouped = [];
@@ -41,6 +45,10 @@ export default function MainPage() {
     }, []);
 
 
+    const handlePressAdd = () => {
+        router.push('/addMemo')
+    }
+
     return (
         <SafeAreaView style={styles.container}>
 
@@ -53,21 +61,33 @@ export default function MainPage() {
             {/* 네비게이션 */}
             <View style={styles.navigator}>
                 <Text style={styles.mainText}>나의 메모</Text>
-                <AntDesign name="plus" size={20} color="black" style={styles.addIcon} />
+                <AntDesign name="plus" size={20} color="black" style={styles.addIcon} onPress={handlePressAdd}/>
             </View>
 
             {/* 태그선택 */}
             <View style={styles.flatlistStyle}>
             <FlatList
                 data={groupedData}
-                renderItem={renderItem}
+                renderItem={({ item }) => (
+                    <RenderItem item={item} onPressTag={pressTag}  tagPressed={tagPressed} />
+                )}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
             />
             </View>
 
             {/* 태그에 맞는 메모 */}
-
+            <View style={[styles.flatlistStyle, {flex: 1}]}>
+            <FlatList 
+            data={filteredData}
+            renderItem={({ item }) => (
+                <View>
+                <RenderMemo item={item}/>
+                </View>
+            )}
+            showsVerticalScrollIndicator={false}
+            />
+            </View>
 
         </SafeAreaView>
     )

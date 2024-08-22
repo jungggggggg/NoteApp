@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
-import { example } from '../exampleData/exampleArray';
+import { example } from '../exampleData/example';
 
 
 const AppContext = createContext(null);
@@ -14,8 +14,9 @@ export type exampleData = {
 
 export const AppProvider = ({ children }) => {
   const [exampleData, setExampleData] = useState(example);
+  const [tagPressed, setTagPressed] = useState('');
 
-  const addData = (newData) => {
+  const addData = (newData: exampleData) => {
     setExampleData([...exampleData, newData]);
   };
 
@@ -23,12 +24,16 @@ export const AppProvider = ({ children }) => {
     setExampleData([]);
   };
 
+  const pressTag = (pressdata: string) => {
+      setTagPressed(pressdata)
+  }
+
   return (
-    <AppContext.Provider value={{ exampleData, addData, resetData }}>
+    <AppContext.Provider value={{ exampleData, addData, resetData, pressTag, tagPressed }}>
       {children}
     </AppContext.Provider>
   );
 };
 
 // Context를 쉽게 사용할 수 있도록 하는 커스텀 훅
-export const useAppContext = () => useContext(AppContext);
+export const useMyContext = () => useContext(AppContext);

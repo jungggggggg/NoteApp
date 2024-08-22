@@ -1,9 +1,9 @@
 
 export default {
     fontColor: '#0B1430',
-    blue: '#7ECBFF',
+    blue: '#BAE2FB',
     orange: '#FFA448',
-    pink: '#FFA6C4',
-    greenBlue: '#1CCCC3',
-    strongPink: '#FFA3A3'
+    pink: '#D0B1F9',
+    greenBlue: '#A3FE94',
+    strongPink: '#FFDBA0'
 }
